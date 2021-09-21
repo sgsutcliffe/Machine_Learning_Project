@@ -37,4 +37,4 @@ I output the composite of this into /processed_data
   * using Terminal tab in a R project
   
 Here we looked at which genus were significantly different in patients with SRN using a Wilcox test, then made a ggplot of the 7 significantly altered genus
-![Significant_genus](figures/significant_genera.tiff)
+![Significant_genus](/figures/significant_genera.tiff)
