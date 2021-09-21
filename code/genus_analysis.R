@@ -1,4 +1,6 @@
 library(tidyverse)
+library(broom)
+library(ggtext)
 
 #From the raw-data we will look at the shared file rows are the different samples and columns are the different OTUs
 #Cells are the abundance
@@ -54,10 +56,52 @@ composite <- inner_join(shared, taxonomy, by='otu') %>%
   inner_join(., metadata, by="group")
   #Add in the metadat
   
+  ##### Second Youtube Video ####
+
+#Goal to find which genus might be associated with screen relevant neoplasia (SRN)
+
+#Wilcoxon signed-rank test: non-parametric statisitcal hypothesis test to compare the two populations using a set of matched samples
+#Individuals with or without SRN
+
+sig_genera <- composite %>%
+  nest(data = -taxonomy) %>%
+  #Here we will exclude all data except taxonomy column, and puts metadata into a data column which is a tibble
+  mutate(test = map(.x=data, ~wilcox.test(rel_abund~srn, data=.x) %>% tidy)) %>%
+  #Mutate allows a new column containing the results of statistical tests, called 'test'. Map will run the function Wilcoxon test
+  #The two variables being relative abundance of an OTU and whether or not they have SRN
+  #.x ; is the arguement name for the wilcox test not the data tibble dataframe
+  # The results of the function is the <htest> but that result can be piped
+  # tidy command comes from broom package
+  # After  tidy command it turns htest into a tibble of 1 x 4
+  # Then, after he'll unest to have the full dataframe back. I need to look at this more!
+  unnest(test) %>%
+  # Unbundled the htest, so you can see that shiny shiny p-value for every genera
+  # Then we need to correct for multiple-comparison errors, as we have 300 genera, so about 14 could be false positives
+  # There are 36 but some are false-positives
+  mutate(p.adjust = p.adjust(p.value, method="BH")) %>%
+  filter(p.adjust < 0.05) %>% 
+  select(taxonomy, p.adjust)
   
-
-
-
-
-
-
+composite %>%
+  inner_join(sig_genera, by="taxonomy") %>%
+  mutate(rel_abund = 100 * (rel_abund + 1/20000), taxonomy = str_replace(taxonomy, "(.*)", "*\\1*"), taxonomy = str_replace(taxonomy, "\\*(.*)_unclassified\\*", "Unclassified<br>*\\1*")) %>%
+  ggplot(aes(x=rel_abund, y=taxonomy, color=srn, fill=srn)) +
+  geom_jitter(position = position_jitterdodge(dodge.width = 0.8, 
+                                              jitter.width = 0.3),
+              shape=21) +
+  #Ooo jitter plot, that's new for me to, and dodge points, with space
+  stat_summary(fun.data =  median_hilow, fun.args = list(conf.int=0.5),
+               geom="pointrange", position = position_dodge(width=0.8),
+               color="black", show.legend=FALSE) +
+               scale_x_log10() +
+  scale_color_manual(NULL, 
+                     breaks = c(F,T),
+                     values = c("gray", "dodgerblue"),
+                     labels = c("Healthy", "SRN"))
+  labs(x="Relative abundance (%)", y=NULL) +
+  theme_classic() +
+  theme(axis.text.y = element_markdown())
+  #adds stats to the figure, the median value
+  #Recall that scale_x_log10 works with stat_summary in this situation because I am using median values. If you were using mean values, you would use
+  #coord_trans(x="log10")
+ggsave("figures/significant_genera.tiff", width=6, height=4)

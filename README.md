@@ -8,3 +8,4 @@ Fun times! I'll be following along the Riffomonas Project to try out their Machi
 ## Video 1: Data Cleaning 
 
 Note I coded alongside the Youtube videos so my final code might be different that his repo
+Highlights: str_replace_all is handy tool with regex to change formating of things, also using tidyverse more for datacleaning, which I do sometimes but %>% is more efficient than what I do, so I should use it more often!
