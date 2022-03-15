@@ -4,10 +4,12 @@ Fun times! I'll be following along the Riffomonas Project to try out their Machi
 *  Try using git in R
 *  Try out mikropml : a supervised machine learning pipeline
 
-The code here, and data comes Pat Schloss at [Riffomonas](https://riffomonas.org/)
+The code here, and data comes Pat Schloss Code Club at [Riffomonas](https://riffomonas.org/)
 Here I coded alongside the videos, and made notes in my code so my code will not look exactly like his.
 
 I would recommend the tutorial. I found it useful to code alongside someone with more experience in R then me. It's helpful to see how someone else does things. 
+
+Videos 1-3 are setting up background steps for ML, if you want to go there ASAP skip ahead
 
 ## Video 1: Data Cleaning 
 
@@ -38,3 +40,5 @@ I output the composite of this into /processed_data
   
 Here we looked at which genus were significantly different in patients with SRN using a Wilcox test, then made a ggplot of the 7 significantly altered genus
 ![Significant_genus](figures/significant_genera.jpeg)
+
+##Video 3: Using custom R functions 
