@@ -1,9 +1,10 @@
-# Machine_Learning_Riffomonas_Project_2021
+# Machine_Learning_Project
 
 Fun times! I'll be following along the Riffomonas Project to try out their Machine Learning R package. Along the way I will also:
 *  Try using git in R
 *  Try out mikropml : a supervised machine learning pipeline
 
+Test
 The code here, and data comes Pat Schloss Code Club at [Riffomonas](https://riffomonas.org/)
 Here I coded alongside the videos, and made notes in my code so my code will not look exactly like his.
 
