@@ -58,22 +58,20 @@ composite <- inner_join(shared, taxonomy, by='otu') %>%
 #I will write this output to processed data
 write.table(composite, file='processed_data/composite.tsv', sep='\t', row.names = FALSE)
 
-##### Second Youtube Video ####
+##### Third Video CC122 ####
 
-#Goal to find which genus might be associated with screen relevant neoplasia (SRN)
+#Goal to find which genus might be associated with Screen Relevant Neoplasia (SRN)
 
-#Wilcoxon signed-rank test: non-parametric statisitcal hypothesis test to compare the two populations using a set of matched samples
-#Individuals with or without SRN
+#Wilcoxon signed-rank test: Non-parametric Statisitcal hypothesis test to compare the two populations using a set of matched samples
+#Individuals with or without SRN, two groups
 
 composite <- read_tsv("processed_data/composite.tsv")
 
 sig_genera <- composite %>%
-  nest(data = -taxonomy) %>%
-  #Here we will exclude all data except taxonomy column, and puts metadata into a data column which is a tibble
-  mutate(test = map(.x=data, ~wilcox.test(rel_abund~srn, data=.x) %>% tidy)) %>%
-  #Mutate allows a new column containing the results of statistical tests, called 'test'. Map will run the function Wilcoxon test
+  nest(data = -taxonomy) %>% #Here we will exclude all data except taxonomy column (genera), and puts metadata into a data column which is a tibble [490 x 20], 490 rows or subjects in a study and 20 columns of metadata
+  mutate(test = map(.x=data, ~wilcox.test(rel_abund~srn, data=.x) %>% tidy)) %>% #Mutate allows a new column containing the results of statistical tests, called 'test'. Map will run the function Wilcoxon test
   #The two variables being relative abundance of an OTU and whether or not they have SRN
-  #.x ; is the arguement name for the wilcox test not the data tibble dataframe
+  #.x ; is the argument name for the wilcox test not the data tibble dataframe
   # The results of the function is the <htest> but that result can be piped
   # tidy command comes from broom package
   # After  tidy command it turns htest into a tibble of 1 x 4
@@ -116,10 +114,14 @@ composite %>%
 
 ggsave("figures/significant_genera.jpeg", device ="jpeg", width=6, height=4)
 
-##### Third video ####
+##### Fourth video ####
+
+#Goal here is to figure out which genera are significant for SCN
+
 #Load in data from previous steps so you don't need to run it every time
 composite <- read_tsv("processed_data/composite.tsv")
 sig_genera <-read_tsv("processed_data/sig_genera.tsv")
+
 
 #create function
 get_sens_spec <- function(threshold, score, actual, direction){

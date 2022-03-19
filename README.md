@@ -6,7 +6,7 @@ Data is from Dr. Pat Schloss, it is a colorectal cancer project.
 
 Fun times! I'll be following along the Riffomonas Project to try out their Machine Learning R package. The bonus for me is:
 *  Try using git in R (I have only used it from command-line up until now)
-*  Try out mikropml: a supervised machine learning pipeline
+*  Try out mikropml: a supervised machine learning pipeline (Built around DOI: https://doi.org/10.1128/mBio.00434-20)
 
 The code here, and data comes Pat Schloss Code Club at [Riffomonas](https://riffomonas.org/)
 Here I coded alongside the videos, and made notes in my code so my code will not look exactly like his.
@@ -37,7 +37,9 @@ raw_data-0.3/baxter.metadata.tsv
 ```
 I output the composite of this into /processed_data 
 
-## Video 3: Testing for significance
+## Video 3: Testing for significance CC122
+
+We're going to look for which genera of bacteria are significantly different (abundance) in SCN. We've got two groups (True/False on SRN) Wilcoxin Test
 
   * nest() : Cool command useful for selecting a column of data from data table for analysis, then bringing it back after. Need to look into more. Seems useful
   * tidy() : Part of broom package used to pipe results 
@@ -45,6 +47,8 @@ I output the composite of this into /processed_data
   
 Here we looked at which genus were significantly different in patients with SRN using a Wilcox test, then made a ggplot of the 7 significantly altered genus
 ![Significant_genus](figures/significant_genera.jpeg)
+
+Other things I learned in-directly was about hidden objects in R (prefix with dot notation) which makes sense after I googled it (for example hidden files often start with .)
 
 ##Video 4: Using custom R functions 
 
