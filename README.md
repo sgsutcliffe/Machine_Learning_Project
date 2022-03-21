@@ -61,6 +61,6 @@ Riffomnas has more in depth video on ROC curve [Riffomonas](https://www.youtube.
 
 We see nicely that while FIT test, which is used for diagnostic of SRN does perform relatively well each bacteria alone does not act as a good biomarker for predicting SRN
 
-![Biomarkers for SRN](figures/roc_figure.jpeg)
+![Biomarkers_for_SRN](figures/roc_figure.jpeg)
 
 
