@@ -37,7 +37,7 @@ raw_data-0.3/baxter.metadata.tsv
 ```
 I output the composite of this into /processed_data 
 
-## Video 3: Testing for significance CC122
+## Video 3: Testing for significance for specific bacteria CC122
 
 We're going to look for which genera of bacteria are significantly different (abundance) in SCN. We've got two groups (True/False on SRN) Wilcoxin Test
 
@@ -50,6 +50,17 @@ Here we looked at which genus were significantly different in patients with SRN 
 
 Other things I learned in-directly was about hidden objects in R (prefix with dot notation) which makes sense after I googled it (for example hidden files often start with .)
 
-##Video 4: Using custom R functions 
+##Video 4: ROC curve for inividual biomarkers CC123
+
+Why we need to used more advanced modeling in microbiome datasets as we see in the significance results from Video 3, while some specific genus might be more abundant in individuals with a disease, most of the individuals in the study will still not have this particular genus. So the idea that one bacteria might cause a disease is unlikely (see Koch's posutlates).
+
+Looking at FIT test: Fecal Immunochemical Test connecting to microbiome data.
+
+Building a ROC curve using FIT and SRN compared to other data.
+Riffomnas has more in depth video on ROC curve [Riffomonas](https://www.youtube.com/watch?v=XSRO4VKD-pc)
+
+We see nicely that while FIT test, which is used for diagnostic of SRN does perform relatively well each bacteria alone does not act as a good biomarker for predicting SRN
+
+![Biomarkers for SRN](figures/roc_figure.jpeg)
 
 

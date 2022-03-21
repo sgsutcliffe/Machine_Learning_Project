@@ -2,7 +2,7 @@ library(tidyverse)
 library(broom)
 library(ggtext)
 
-#### Video 2 CC121 ####
+#### Second Video CC121 ####
 
 #From the raw-data we will look at the shared file rows are the different samples and columns are the different OTUs
 #Cells are the abundance
@@ -114,22 +114,36 @@ composite %>%
 
 ggsave("figures/significant_genera.jpeg", device ="jpeg", width=6, height=4)
 
-##### Fourth video ####
+##### Fourth video CC123 ####
 
-#Goal here is to figure out which genera are significant for SCN
+#Goal here is to figure out which genera are significant for SCN, moving beyond Wilcox test
 
 #Load in data from previous steps so you don't need to run it every time
 composite <- read_tsv("processed_data/composite.tsv")
 sig_genera <-read_tsv("processed_data/sig_genera.tsv")
 
+test <- composite %>% 
+  inner_join(sig_genera, by='taxonomy') %>% #Only look at patient metadata for bacteria that were significantly different
+  select(group, taxonomy, rel_abund, fit_result, srn) %>% #For the metadata we only want 1) SRN 2) taxonomy 3) relative abundance 4) fit result 5) group ID
+  pivot_wider(names_from=taxonomy, values_from=rel_abund) %>%
+  pivot_longer(cols=-c(group, srn), names_to="metric", values_to="score") %>%
+  filter(metric == "fit_result") #FIT score is a good recommender for whether an individual is likely to have SRN, and used as comparison
 
-#create function
+#Build a ROC curve based on FIT score
+
+#create function arguments
+#Threshold: Defined by criteria, for example for FIT result we use 100
+#Score: FIT result
+#Actual: Actual SRN result (whether or not an individual has the disease)
+#Direction: So if higher values are associated wth positive, then we would want greater than, if lower values were associated then we'd want less than
+
 get_sens_spec <- function(threshold, score, actual, direction){
   
-  threshold <-  100
-  score <- test$score
-  actual <- test$srn
-  direction <- "greaterthan"
+  #Testing block to show that FIT predicts SRN as it should
+  #threshold <-  100
+  #score <- test$score #So function pulls test dataframe
+  #actual <- test$srn #So function pulls test dataframe
+  #direction <- "greaterthan"
   
   predicted <- if(direction == "greaterthan") {
     score > threshold
@@ -149,14 +163,42 @@ get_sens_spec <- function(threshold, score, actual, direction){
   
   tibble("specificity" = specificity, "sensitivity" = sensitivity)
 }
-#threshold; 100 for fit result, score, actual fit result, actual, diagnosis or srn column, direction, whether higher  or lower values, 
+
+#Lets make a ROC curve based on fit-score
+#Test the function again.
+get_sens_spec(100, test$score, test$srn, "greaterthan")
+
+#So we now want to the senstivity function to run over multiple thresholds
+
+get_roc_data <- function(x, direction){
+  #x <- test
+  #direction <- "greaterthan"
   
-test <- composite %>%
-  inner_join(sig_genera, by="taxonomy") %>%
-#We want SRN, group taxonomy, relatibe abundance, fit_result (which is a measurement of blood in stool), srn
-  select(group, taxonomy, rel_abund, fit_result, srn) %>%
+  thresholds <- unique(x$score) %>% sort()
+  map_dfr(.x=thresholds, ~get_sens_spec(.x, x$score, x$srn, direction)) %>%
+    rbind(c(specificity = 0, sensitivity = 1))
+  
+}
+
+#Now we revisit it to not just include the FIT result but other results
+roc_data <- composite %>% 
+  inner_join(sig_genera, by='taxonomy') %>% #Only look at patient metadata for bacteria that were significantly different
+  select(group, taxonomy, rel_abund, fit_result, srn) %>% #For the metadata we only want 1) SRN 2) taxonomy 3) relative abundance 4) fit result 5) group ID
   pivot_wider(names_from=taxonomy, values_from=rel_abund) %>%
   pivot_longer(cols=-c(group, srn), names_to="metric", values_to="score") %>%
-  filter(metric == "fit_result")
-#Fit test is used to predict whether you need to get colonoscopy for SRN
-#Lets make a ROC curve based on fit-score
+  # filter(metric == "fit_result") %>% #Remove FIT result to include other markers
+  nest(data2 = -metric) %>%
+  mutate(direction = if_else(metric == "Lachnospiraceae_unclassified",
+                             "lessthan","greaterthan")) %>% #Unlike all other bacteria, Lachnos increases in healthy individuals
+  mutate(roc_data = map2(.x = data2, .y=direction, ~get_roc_data(.x, .y))) %>%
+  unnest(roc_data) %>%
+  select(metric, specificity, sensitivity)
+
+
+roc_data %>%
+  ggplot(aes(x=1-specificity, y=sensitivity, color=metric)) +
+  geom_line() +
+  geom_abline(slope = 1, intercept = 0, color="gray") +
+  theme_classic()
+
+ggsave("figures/roc_figure.jpeg", device ="jpeg", width=6, height=4)
