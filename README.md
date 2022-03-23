@@ -72,3 +72,6 @@ The mikropml pipeline
 ![Biomarkers_for_SRN](figures/mikropml_fig1.jpeg)
 Figure taken from [Topçuoğlu et al. (2020)](https://doi.org/10.1128/mBio.00434-20)
 
+We first used logistic regression: 
+![Output](first_mikroml_output_summary.png)
+A) Logistic regression B) The 80/20 split where the 5 fold cross validation occurs C) Lambda parameter is the hyperparameter (between 10^-4 and 10) to maximize the AUC D) the tuning parameter was held constant
