@@ -76,7 +76,7 @@ We first used logistic regression:
 ![Output](figures/first_mikroml_output_summary.jpeg)
 A) Logistic regression B) The 80/20 split where the 5 fold cross validation occurs C) Lambda parameter is the hyperparameter (between 10^-4 and 10) to maximize the AUC D) the tuning parameter was held constant
 
-'''R
+```{r}
 $performance
 # A tibble: 1 × 17
   cv_metric_AUC logLoss   AUC prAUC Accuracy Kappa    F1 Sensitivity Specificity Pos_Pred_Value Neg_Pred_Value Precision Recall Detection_Rate Balanced_Accuracy
@@ -86,5 +86,5 @@ $performance
 
 $feature_importance
 [1] "Skipped feature importance"
-'''
+```
 We skipped feature importance as we are still trying to work things out
