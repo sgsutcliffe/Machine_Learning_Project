@@ -75,3 +75,16 @@ Figure taken from [Topçuoğlu et al. (2020)](https://doi.org/10.1128/mBio.00434
 We first used logistic regression: 
 ![Output](figures/first_mikroml_output_summary.jpeg)
 A) Logistic regression B) The 80/20 split where the 5 fold cross validation occurs C) Lambda parameter is the hyperparameter (between 10^-4 and 10) to maximize the AUC D) the tuning parameter was held constant
+
+'''R
+$performance
+# A tibble: 1 × 17
+  cv_metric_AUC logLoss   AUC prAUC Accuracy Kappa    F1 Sensitivity Specificity Pos_Pred_Value Neg_Pred_Value Precision Recall Detection_Rate Balanced_Accuracy
+          <dbl>   <dbl> <dbl> <dbl>    <dbl> <dbl> <dbl>       <dbl>       <dbl>          <dbl>          <dbl>     <dbl>  <dbl>          <dbl>             <dbl>
+1         0.636   0.674 0.714 0.699    0.588 0.121 0.718       0.981       0.133          0.567          0.857     0.567  0.981          0.526             0.557
+# … with 2 more variables: method <chr>, seed <dbl>
+
+$feature_importance
+[1] "Skipped feature importance"
+'''
+We skipped feature importance as we are still trying to work things out
