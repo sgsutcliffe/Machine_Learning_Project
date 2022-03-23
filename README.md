@@ -63,4 +63,12 @@ We see nicely that while FIT test, which is used for diagnostic of SRN does perf
 
 ![Biomarkers_for_SRN](figures/roc_figure.jpeg)
 
+## Video 5: Introduction to Supervised Machine Learning Pipeline CC124
+mikropml: a supervised machine learning
+
+We began by looking at whether in our 490 samples (individuals) our 280 bacteria (at the genus level) shift their relative abundance in patients with SRN.
+
+The mikropml pipeline
+![Biomarkers_for_SRN](figures/mikropml_fig1.jpeg)
+Figure taken from [Topçuoğlu et al. (2020)](https://doi.org/10.1128/mBio.00434-20)
 

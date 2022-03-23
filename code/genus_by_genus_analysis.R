@@ -154,10 +154,7 @@ roc_data %>%
 
 ggsave("figures/roc_figure.jpeg", device ="jpeg", width=6, height=4)
 
-#### Fifth video CC124 ####
 
-#As we have shown in the previous analysis there is no one good bacteria to predict SRN, so we will use mikropml
 
-install.packages('mikropml')
 
 
